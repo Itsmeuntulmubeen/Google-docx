@@ -20,3 +20,27 @@ Stage Summary:
 - Deliverable: /home/z/my-project/download/Ajaia-Assessment-Submission-Template.docx (passes postcheck 9/9, 0 errors, 0 warnings)
 - 8 body sections mapped to the 4 grading criteria, 12 tables, 【】 placeholders per skill convention
 - Rebuild anytime with: bash /home/z/my-project/scripts/build.sh
+
+---
+Task ID: 2
+Agent: main (Z.ai)
+Task: Build a Google Docs clone ("google docx clone banana hai") as a working Next.js web app — Type 3 fullstack development.
+
+Work Log:
+- Initialized fullstack env via init script; inspected scaffold (Next.js 16 App Router, Prisma/SQLite, shadcn/ui, z-ai-web-dev-sdk)
+- Prisma schema: Document (title, content JSON) + AiInteraction (documentId, action, inputText, result) as AI audit trail; db:push done
+- API routes: GET/POST /api/documents, GET/PATCH/DELETE /api/documents/[id] (zod-validated, Next 16 async params), POST /api/ai (server-side ZAI SDK, 4 actions: continue/improve/summarize/title, fences stripped, result logged to AiInteraction)
+- Installed Tiptap 3.32; fixed v3 breaking change: TextStyle/Color/FontFamily are NAMED exports of @tiptap/extension-text-style (no default export)
+- Home view (single-page state routing, only / route): Docs logo, pill search, template gallery (blank/notes/proposal/resume/letter with pre-filled content), recent list with relativeTime, kebab menu (open/rename dialog/delete AlertDialog)
+- Editor view: Docs-style header (logo back, editable title, star, save status), functional File/Edit/Insert/Format menubar, toolbar (undo/redo, style+font Selects, B/I/U/S, color+highlight popovers, link popover with empty-selection insert, align, 3 list types incl. checklist, clear formatting) using useEditorState; A4-like white page (816px, 11.76% padding) with Docs typography CSS in globals.css
+- Autosave: 900ms debounce, dirty-ref flush, visibilitychange keepalive flush, save-before-back, status states saved/saving/error with retry; word-count chip
+- AI side panel (Gemini-style): action chips, context label (selection vs whole doc), loading/result/error states, Insert-at-cursor (replaces selection), Append with "- " → bulletList conversion, Apply-as-title, Copy, Regenerate
+- page.tsx shell: view state home|editor keyed remount, documents cache with upsertMeta on autosave
+- Fixed lint (react-hooks/set-state-in-effect): inlined async IIFE fetch in page.tsx effect, removed sync setStatus in editor effect; ignored scripts/ in eslint config
+- E2E verified with Agent Browser: create from template, typing + autosave persisted (API confirmed), Suggest title applied, Continue writing inserted matching content, search filter, delete flow, mobile 390px viewport, zero console/page errors
+- Seeded "Welcome to Docs ✨" demo document via API for first-run showcase
+
+Stage Summary:
+- Deliverable: runnable Google Docs clone at / (Next.js 16 + Tiptap 3 + Prisma/SQLite + z-ai-web-dev-sdk)
+- All CRUD + AI endpoints smoke-tested 200/201; lint clean; dev.log clean post-fix
+- AI leverage evidence: every AI call persisted in AiInteraction table
